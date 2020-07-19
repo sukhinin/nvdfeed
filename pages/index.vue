@@ -6,44 +6,34 @@
     </v-app-bar>
 
     <v-navigation-drawer v-model="drawer" width="350" app clipped color="grey lighten-4">
-      <v-container fluid class="px-5 py-4">
-        <v-row dense>
-          <v-col cols="12" class="text-body-2 text-uppercase">
-            Last update
-          </v-col>
-          <v-col cols="12">
-            <v-btn-toggle mandatory v-model="filter.updatedWithin" class="full-width">
-              <v-btn small :value="24*60*60*1000">1 day</v-btn>
-              <v-btn small :value="3*24*60*60*1000">3 days</v-btn>
-              <v-btn small :value="7*24*60*60*1000">7 days</v-btn>
-            </v-btn-toggle>
-          </v-col>
-          <v-col cols="12">
-            <v-switch v-model="filter.includePreviouslyPublished"
-                      label="Show updates of old CVEs"
-                      class="my-0">
-            </v-switch>
-          </v-col>
-        </v-row>
-        <v-row dense>
-          <v-col cols="12" class="text-body-2 text-uppercase">
+      <v-container class="d-flex flex-column px-5 py-4">
+        <div class="d-flex flex-column mb-2">
+          <div class="text-body-2 text-uppercase mb-2">Last update</div>
+          <v-btn-toggle mandatory v-model="filter.updatedWithin" class="mb-2">
+            <v-btn small :value="24*60*60*1000" class="flex-grow-1">1 day</v-btn>
+            <v-btn small :value="3*24*60*60*1000" class="flex-grow-1">3 days</v-btn>
+            <v-btn small :value="7*24*60*60*1000" class="flex-grow-1">7 days</v-btn>
+          </v-btn-toggle>
+          <v-switch v-model="filter.includePreviouslyPublished"
+                    label="Show updates of old CVEs"
+                    class="my-0">
+          </v-switch>
+        </div>
+        <div class="d-flex flex-column mb-2">
+          <div class="text-body-2 text-uppercase mb-2">
             Severity
-          </v-col>
-          <v-col cols="12">
-            <v-btn-toggle mandatory v-model="filter.severity" class="full-width">
-              <v-btn small value="LOW">Low</v-btn>
-              <v-btn small value="MEDIUM">Medium</v-btn>
-              <v-btn small value="HIGH">High</v-btn>
-              <v-btn small value="CRITICAL">Critical</v-btn>
-            </v-btn-toggle>
-          </v-col>
-          <v-col cols="12">
-            <v-switch v-model="filter.includeUnassignedSeverity"
-                      label="Show without assigned severity"
-                      class="my-0">
-            </v-switch>
-          </v-col>
-        </v-row>
+          </div>
+          <v-btn-toggle mandatory v-model="filter.severity" class="mb-2">
+            <v-btn small value="LOW" class="flex-grow-1">Low</v-btn>
+            <v-btn small value="MEDIUM" class="flex-grow-1">Medium</v-btn>
+            <v-btn small value="HIGH" class="flex-grow-1">High</v-btn>
+            <v-btn small value="CRITICAL" class="flex-grow-1">Critical</v-btn>
+          </v-btn-toggle>
+          <v-switch v-model="filter.includeUnassignedSeverity"
+                    label="Show without assigned severity"
+                    class="my-0">
+          </v-switch>
+        </div>
       </v-container>
     </v-navigation-drawer>
 
@@ -109,16 +99,6 @@
     </v-main>
   </v-app>
 </template>
-
-<style>
-  .full-width {
-    width: 100%;
-  }
-
-  .full-width.v-item-group * {
-    flex-grow: 1;
-  }
-</style>
 
 <script>
   import feed from '~/static/nvdcve-mapped.json';
