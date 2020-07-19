@@ -65,6 +65,10 @@ function isNotRejected(item) {
   return !item.description.startsWith('** REJECT **');
 }
 
+function compareByUpdatedTimestamp(item1, item2) {
+  return item2.updated - item1.updated;
+}
+
 const inputFilePath = process.argv[2] || './nvdcve-1.1-modified.json';
 const outputFilePath = process.argv[3] || './nvdcve-mapped.json';
 
@@ -74,6 +78,7 @@ const json = JSON.parse(input);
 assert.strictEqual(json.CVE_data_type, 'CVE');
 assert.strictEqual(json.CVE_data_version, '4.0');
 const items = json.CVE_Items.map(mapCveItem).filter(isNotRejected);
+items.sort(compareByUpdatedTimestamp);
 
 const output = JSON.stringify(items, null, 2);
 fs.writeFileSync(outputFilePath, output);
