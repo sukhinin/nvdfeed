@@ -51,7 +51,7 @@
       <v-container>
         <v-data-iterator :items="filteredItems"
                          :items-per-page="50"
-                         :footer-props="{'items-per-page-options': [25, 50, 100]}"
+                         :footer-props="{'items-per-page-options': [50]}"
                          v-on:pagination="onPagination">
           <template v-slot:default="props">
             <v-row>
