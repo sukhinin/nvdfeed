@@ -94,8 +94,16 @@
                       {{ item.description }}
                     </div>
                     <div class="text-caption mt-3">
-                      Published on {{ new Date(item.published).toLocaleDateString() }},
-                      updated on {{ new Date(item.updated).toLocaleDateString() }}
+                      <v-tooltip right v-if="item.updated > updated">
+                        <template v-slot:activator="{ on, attrs }">
+                          <span v-bind="attrs" v-on="on" class="red--text">◉</span>
+                        </template>
+                        <span>CVE has been updated</span>
+                      </v-tooltip>
+                      <span>
+                        Published on {{ new Date(item.published).toLocaleDateString() }},
+                        updated on {{ new Date(item.updated).toLocaleDateString() }}
+                      </span>
                     </div>
                   </v-card-text>
                 </v-card>
@@ -170,6 +178,7 @@
       return {
         drawer: false,
         feed: [],
+        updated: 0,
         loading: true,
         metadata: metadata,
         visibleProductsCount: 5,
@@ -183,8 +192,14 @@
     },
     mounted() {
       this.filter = { ...this.filter, ...this.restoreFilterParameters() };
-      import('~/static/nvdcve-mapped.json').then(feed => {
-        this.feed = Object.values(feed);
+      this.updated = this.restoreUpdatedTimestamp();
+
+      import('~/static/nvdcve-mapped.json').then(obj => {
+        const feed = Object.values(obj);
+        if (feed.length > 0) {
+          this.saveUpdatedTimestamp(feed[0].updated);
+          this.feed = Object.values(feed);
+        }
         this.loading = false;
       });
     },
@@ -233,6 +248,17 @@
           return JSON.parse(window.localStorage.filter);
         }
         return {};
+      },
+      saveUpdatedTimestamp: function (updated) {
+        if (process.client) {
+          window.localStorage.updated = JSON.stringify(updated);
+        }
+      },
+      restoreUpdatedTimestamp: function () {
+        if (process.client && window.localStorage.updated) {
+          return JSON.parse(window.localStorage.updated);
+        }
+        return 0;
       }
     },
     watch: {
