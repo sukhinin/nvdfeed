@@ -11,9 +11,10 @@ function mapCveItem(item) {
   const updated = Date.parse(item.lastModifiedDate);
 
   const description = mapCveDescription(item);
-  const impact = mapCveImpact(item.impact);
+  const impact = mapCveImpact(item);
+  const products = mapCveAffectedProducts(item);
 
-  return { id, published, updated, description, ...impact };
+  return { id, published, updated, description, ...impact, products };
 }
 
 function mapCveDescription(item) {
@@ -26,14 +27,14 @@ function mapCveDescription(item) {
   return item.cve.description.description_data[0].value;
 }
 
-function mapCveImpact(impact) {
-  if (impact.baseMetricV3) {
-    const metric = impact.baseMetricV3;
+function mapCveImpact(item) {
+  if (item.impact.baseMetricV3) {
+    const metric = item.impact.baseMetricV3;
     return mapCveImpactMetricV3(metric);
   }
 
-  if (impact.baseMetricV2) {
-    const metric = impact.baseMetricV2;
+  if (item.impact.baseMetricV2) {
+    const metric = item.impact.baseMetricV2;
     return mapCveImpactMetricV2(metric);
   }
 
@@ -59,6 +60,33 @@ function mapCveImpactMetricV2(metric) {
   const severity = metric.severity;
 
   return { score, vector, severity };
+}
+
+function mapCveAffectedProducts(item) {
+  assert.strictEqual(item.configurations.CVE_data_version, '4.0');
+
+  if (item.configurations.nodes && item.configurations.nodes.length > 0) {
+    const node = item.configurations.nodes[0];
+    if (node.cpe_match) {
+      return mapCpeMatchNodeArray(node.cpe_match);
+    }
+    if (node.children && node.children.length > 0 && node.children[0].cpe_match) {
+      return mapCpeMatchNodeArray(node.children[0].cpe_match);
+    }
+  }
+
+  return [];
+}
+
+function mapCpeMatchNodeArray(nodes) {
+  const products = new Set();
+  for (node of nodes) {
+    if (node.vulnerable) {
+      const entry = node.cpe23Uri.split(':').slice(3, 5).filter(s => s !== '*').join(':');
+      products.add(entry);
+    }
+  }
+  return Array.from(products);
 }
 
 function isNotRejected(item) {
