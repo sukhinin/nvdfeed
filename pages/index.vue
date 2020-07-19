@@ -45,8 +45,11 @@
     <v-main>
       <v-container>
         <v-data-iterator :items="filteredItems"
+                         :loading="loading"
                          :items-per-page="50"
                          :footer-props="{'items-per-page-options': [50]}"
+                         :hide-default-footer="loading"
+                         loading-text="Loading CVE entries..."
                          v-on:pagination="onPagination">
           <template v-slot:default="props">
             <v-row>
@@ -106,7 +109,6 @@
 </template>
 
 <script>
-  import feed from '~/static/nvdcve-mapped.json';
   import metadata from '~/static/metadata.json';
 
   const itemSeverityToMatchingFilterValuesMap = {
@@ -167,7 +169,8 @@
     data: function () {
       return {
         drawer: false,
-        feed: feed,
+        feed: [],
+        loading: true,
         metadata: metadata,
         visibleProductsCount: 5,
         filter: {
@@ -180,6 +183,10 @@
     },
     mounted() {
       this.filter = { ...this.filter, ...this.restoreFilterParameters() };
+      import('~/static/nvdcve-mapped.json').then(feed => {
+        this.feed = Object.values(feed);
+        this.loading = false;
+      });
     },
     computed: {
       filteredItems: function () {
