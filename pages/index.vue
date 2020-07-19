@@ -60,24 +60,21 @@
                   <v-card-title>
                     <a :href="'https://nvd.nist.gov/vuln/detail/' + item.id" target="_blank">{{ item.id }}</a>
                     <v-spacer></v-spacer>
-                    <v-chip :color="getSeverityColor(item.severity)">
-                      {{ item.score || 'N/A' }} {{ item.severity }}
-                    </v-chip>
-                  </v-card-title>
-                  <v-card-subtitle class="text-caption">
-                    <div>
-                      Published on {{ new Date(item.published).toLocaleDateString() }},
-                      updated on {{ new Date(item.updated).toLocaleDateString() }}
-                    </div>
-                    <v-tooltip right v-if="item.vector" min-width="300">
+                    <v-tooltip left v-if="item.vector" min-width="300">
                       <template v-slot:activator="{ on, attrs }">
-                        <span v-bind="attrs" v-on="on">{{item.vector}}</span>
+                        <v-chip v-bind="attrs" v-on="on" :color="getSeverityColor(item.severity)">
+                          {{ item.score || 'N/A' }} {{ item.severity }}
+                        </v-chip>
                       </template>
                       <v-row no-gutters v-for="props in getDecodedVector(item.vector)" :key="props.label">
                         <v-col cols="7">{{props.label}}</v-col>
                         <v-col cols="5">{{props.value}}</v-col>
                       </v-row>
                     </v-tooltip>
+                  </v-card-title>
+                  <v-card-subtitle class="text-caption">
+                      Published on {{ new Date(item.published).toLocaleDateString() }},
+                      updated on {{ new Date(item.updated).toLocaleDateString() }}
                   </v-card-subtitle>
                   <v-card-text>
                     {{ item.description }}
