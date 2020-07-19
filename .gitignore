@@ -1,0 +1,5 @@
+.idea
+.nuxt
+dist
+node_modules
+static/nvdcve-mapped.json

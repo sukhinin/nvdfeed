@@ -1,0 +1,26 @@
+name: build-and-deploy
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  push:
+    branches: ['master']
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: master
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12'
+      - name: install
+        run: npm install
+      - name: build
+        run: npm run build
+      - name: deploy
+        run: npm run deploy
+        env:
+          NETLIFY_AUTH_TOKEN: ${{secrets.NETLIFY_AUTH_TOKEN}}

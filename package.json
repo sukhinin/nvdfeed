@@ -1,0 +1,14 @@
+{
+  "name": "my-app",
+  "scripts": {
+    "dev": "nuxt",
+    "build": "./nvdfeed-update.sh && nuxt build && nuxt export",
+    "deploy": "./deploy-netlify.sh"
+  },
+  "dependencies": {
+    "nuxt": "^2.13.3"
+  },
+  "devDependencies": {
+    "@nuxtjs/vuetify": "^1.11.2"
+  }
+}
