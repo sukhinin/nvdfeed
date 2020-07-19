@@ -191,6 +191,9 @@
         }
       };
     },
+    mounted() {
+      this.filter = { ...this.filter, ...this.restoreFilterParameters() };
+    },
     computed: {
       filteredItems: function () {
         const now = Date.now();
@@ -225,6 +228,25 @@
         if (process.client) {
           window.requestAnimationFrame(() => this.$vuetify.goTo(0));
         }
+      },
+      saveFilterParameters: function (filter) {
+        if (process.client) {
+          window.localStorage.filter = JSON.stringify(filter);
+        }
+      },
+      restoreFilterParameters: function () {
+        if (process.client && window.localStorage.filter) {
+          return JSON.parse(window.localStorage.filter);
+        }
+        return {};
+      }
+    },
+    watch: {
+      filter: {
+        handler: function (filter) {
+          this.saveFilterParameters(filter);
+        },
+        deep: true
       }
     }
   };
