@@ -60,16 +60,18 @@
                   <v-card-title>
                     <a :href="'https://nvd.nist.gov/vuln/detail/' + item.id" target="_blank">{{ item.id }}</a>
                     <v-spacer></v-spacer>
-                    <v-tooltip left v-if="item.vector" min-width="300">
+                    <v-tooltip left :disabled="!item.vector" min-width="300">
                       <template v-slot:activator="{ on, attrs }">
                         <v-chip v-bind="attrs" v-on="on" :color="getSeverityColor(item.severity)">
-                          {{ item.score || 'N/A' }} {{ item.severity }}
+                          {{ (item.score && item.score.toFixed(1)) || 'N/A' }} {{ item.severity }}
                         </v-chip>
                       </template>
-                      <v-row no-gutters v-for="props in getDecodedVector(item.vector)" :key="props.label">
-                        <v-col cols="7">{{props.label}}</v-col>
-                        <v-col cols="5">{{props.value}}</v-col>
-                      </v-row>
+                      <template v-if="item.vector">
+                        <v-row no-gutters v-for="props in getDecodedVector(item.vector)" :key="props.label">
+                          <v-col cols="7">{{props.label}}</v-col>
+                          <v-col cols="5">{{props.value}}</v-col>
+                        </v-row>
+                      </template>
                     </v-tooltip>
                   </v-card-title>
                   <v-card-subtitle v-if="item.products.length > 0" class="pt-2">
