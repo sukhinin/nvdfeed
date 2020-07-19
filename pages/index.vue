@@ -72,12 +72,31 @@
                       </v-row>
                     </v-tooltip>
                   </v-card-title>
-                  <v-card-subtitle class="text-caption">
-                      Published on {{ new Date(item.published).toLocaleDateString() }},
-                      updated on {{ new Date(item.updated).toLocaleDateString() }}
+                  <v-card-subtitle v-if="item.products.length > 0" class="pt-2">
+                    <v-chip v-for="(product, index) of item.products" :key="product"
+                            v-if="index < visibleProductsCount"
+                            small outlined label class="mr-1 mb-1">
+                      {{product}}
+                    </v-chip>
+                    <v-tooltip bottom v-if="item.products.length > visibleProductsCount">
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-chip v-bind="attrs" v-on="on" small label class="mr-1 mb-1">
+                          +{{item.products.length - visibleProductsCount}} more
+                        </v-chip>
+                      </template>
+                      <span>
+                        {{ item.products.slice(visibleProductsCount).join(', ') }}
+                      </span>
+                    </v-tooltip>
                   </v-card-subtitle>
                   <v-card-text>
-                    {{ item.description }}
+                    <div>
+                      {{ item.description }}
+                    </div>
+                    <div class="text-caption mt-3">
+                      Published on {{ new Date(item.published).toLocaleDateString() }},
+                      updated on {{ new Date(item.updated).toLocaleDateString() }}
+                    </div>
                   </v-card-text>
                 </v-card>
               </v-col>
@@ -161,6 +180,7 @@
       return {
         drawer: false,
         feed: feed,
+        visibleProductsCount: 5,
         filter: {
           updatedWithin: 3 * 24 * 60 * 60 * 1000,
           includePreviouslyPublished: true,
