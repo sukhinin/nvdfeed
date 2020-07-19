@@ -123,7 +123,7 @@
       values: { 'P': 'physical', 'L': 'local', 'A': 'adjacent network', 'N': 'network' }
     },
     'AC': {
-      label: 'Access complexity',
+      label: 'Attack complexity',
       values: { 'H': 'high', 'M': 'medium', 'L': 'low' }
     },
     'Au': {
