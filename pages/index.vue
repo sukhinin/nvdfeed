@@ -6,7 +6,7 @@
     </v-app-bar>
 
     <v-navigation-drawer v-model="drawer" width="350" app clipped color="grey lighten-4">
-      <v-container class="d-flex flex-column px-5 py-4">
+      <v-container class="d-flex flex-column px-5 py-4" style="min-height: 100%;">
         <div class="d-flex flex-column mb-2">
           <div class="text-body-2 text-uppercase mb-2">Last update</div>
           <v-btn-toggle mandatory v-model="filter.updatedWithin" class="mb-2">
@@ -33,6 +33,11 @@
                     label="Show without assigned severity"
                     class="my-0">
           </v-switch>
+        </div>
+        <div class="d-flex flex-column flex-grow-1 justify-end text-caption text--disabled">
+          <div>© 2020 Boris Sukhinin</div>
+          <div>Git commit {{ metadata.git_commit }}</div>
+          <div>Last updated {{ new Date(metadata.last_update).toLocaleString() }}</div>
         </div>
       </v-container>
     </v-navigation-drawer>
@@ -102,6 +107,7 @@
 
 <script>
   import feed from '~/static/nvdcve-mapped.json';
+  import metadata from '~/static/metadata.json';
 
   const itemSeverityToMatchingFilterValuesMap = {
     'LOW': ['LOW'],
@@ -162,6 +168,7 @@
       return {
         drawer: false,
         feed: feed,
+        metadata: metadata,
         visibleProductsCount: 5,
         filter: {
           updatedWithin: 3 * 24 * 60 * 60 * 1000,

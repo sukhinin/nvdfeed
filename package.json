@@ -2,7 +2,7 @@
   "name": "my-app",
   "scripts": {
     "dev": "nuxt",
-    "build": "./nvdfeed-update.sh && nuxt build && nuxt export",
+    "build": "./nvdfeed-update.sh && ./metadata-update.sh && nuxt build && nuxt export",
     "deploy": "./deploy-netlify.sh"
   },
   "dependencies": {

@@ -2,4 +2,5 @@
 .nuxt
 dist
 node_modules
+static/metadata.json
 static/nvdcve-mapped.json
