@@ -194,8 +194,8 @@
       this.filter = { ...this.filter, ...this.restoreFilterParameters() };
       this.updated = this.restoreUpdatedTimestamp();
 
-      import('~/static/nvdcve-mapped.json').then(obj => {
-        const feed = Object.values(obj);
+      import('~/static/nvdcve-mapped.json').then(module => {
+        const feed = module.default;
         if (feed.length > 0) {
           this.saveUpdatedTimestamp(feed[0].updated);
           this.feed = Object.values(feed);
