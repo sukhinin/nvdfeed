@@ -81,7 +81,7 @@ function mapCveAffectedProducts(item) {
 function mapCpeMatchNodeArray(nodes) {
   const products = new Set();
   for (node of nodes) {
-    if (node.vulnerable) {
+    if (node.vulnerable && node.cpe23Uri) {
       const entry = node.cpe23Uri.split(':').slice(3, 5).filter(s => s !== '*').join(':');
       products.add(entry);
     }
