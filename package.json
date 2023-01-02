@@ -6,7 +6,7 @@
     "deploy": "./deploy-netlify.sh"
   },
   "dependencies": {
-    "nuxt": "^2.15.4"
+    "nuxt": "^3.0.0"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.11.3"
